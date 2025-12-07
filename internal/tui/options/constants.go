@@ -8,6 +8,7 @@ const (
 	IncludeSubfolders     = "Include subfolders"
 	DeleteEmptySubfolders = "Delete empty subfolders"
 	SendFilesToTrash      = "Send files to trash"
+	SecureDeleteFiles     = "Secure delete files"
 	LogOperations         = "Log operations"
 	LogToFile             = "Log to file"
 	ShowStatistics        = "Show statistics"
@@ -23,6 +24,7 @@ var DefaultCleanOptionState = map[string]bool{
 	IncludeSubfolders:     false,
 	DeleteEmptySubfolders: false,
 	SendFilesToTrash:      false,
+	SecureDeleteFiles:     false,
 	LogOperations:         false,
 	LogToFile:             false,
 	ShowStatistics:        true,
@@ -35,6 +37,7 @@ var DefaultCleanOption = []string{
 	IncludeSubfolders,
 	DeleteEmptySubfolders,
 	SendFilesToTrash,
+	SecureDeleteFiles,
 	LogOperations,
 	LogToFile,
 	ShowStatistics,

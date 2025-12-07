@@ -20,6 +20,8 @@ func GetEmojiByCleanOption(optionName string) string {
 		emoji = "🗑️"
 	case SendFilesToTrash:
 		emoji = "♻️"
+	case SecureDeleteFiles:
+		emoji = "🔒"
 	case LogOperations:
 		emoji = "📝"
 	case LogToFile:
