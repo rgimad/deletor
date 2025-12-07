@@ -87,10 +87,6 @@ func (t *OptionsTab) renderSecureDeletionSubmenu() string {
 			radio = "●"
 		}
 
-		// if i != 0 {
-		// 	builder.WriteString("\n")
-		// }
-
 		builder.WriteString(zone.Mark(fmt.Sprintf("secure_deletion_algo_%d", i),
 			subStyle.Render(fmt.Sprintf("    [%s] %s", radio, algo))))
 		builder.WriteString("\n")
