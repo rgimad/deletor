@@ -22,6 +22,8 @@ type defaultRules struct {
 	IncludeSubfolders     bool     `json:",omitempty"` // Whether to process subfolders
 	DeleteEmptySubfolders bool     `json:",omitempty"` // Whether to remove empty folders
 	SendFilesToTrash      bool     `json:",omitempty"` // Whether to use trash instead of delete
+	SecureDeleteFiles     bool     `json:",omitempty"` // If true, files will be removed securely by rewriting them with some pattern
+	SecureDeletionAlgo    string   `json:",omitempty"` // Used secure deletion algoritm
 	LogOperations         bool     `json:",omitempty"` // Whether to log operations
 	LogToFile             bool     `json:",omitempty"` // Whether to write logs to file
 	ShowStatistics        bool     `json:",omitempty"` // Whether to display statistics

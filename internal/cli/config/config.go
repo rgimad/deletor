@@ -23,6 +23,8 @@ type Config struct {
 	OlderThan          time.Time // Only process files older than this time
 	NewerThan          time.Time // Only process files newer than this time
 	MoveFileToTrash    bool      // If true, files will be moved to trash instead of being permanently deleted
+	SecureDeleteFiles  bool      // If true, files will be removed securely by rewriting them with some pattern
+	SecureDeletionAlgo string    // Used secure deletion algoritm
 	UseRules           bool      // Whether to use rules from configuration file
 	JsonLogsEnabled    bool      // Whether to generates JSON-formatted logs
 	JsonLogsPath       string    // Path to append JSON-formatted logs
@@ -83,6 +85,9 @@ func (c *Config) GetWithRules(rules rules.Rules) *Config {
 	}
 	if !c.MoveFileToTrash {
 		c.MoveFileToTrash = defaultRules.SendFilesToTrash
+	}
+	if !c.SecureDeleteFiles {
+		c.SecureDeleteFiles = defaultRules.SecureDeleteFiles
 	}
 
 	return c

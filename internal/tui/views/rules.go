@@ -36,6 +36,8 @@ type RulesModel struct {
 	// Options tab fields
 	OptionState map[string]bool
 
+	SecureDeletionAlgo string
+
 	// Common fields
 	rules           rules.Rules
 	FocusedElement  string // "locationInput", "saveButton", "extensionsInput", "minSizeInput", "maxSizeInput", "excludeInput", "olderInput", "newerInput", "rules_option_1", "rules_option_2", etc.
@@ -119,16 +121,18 @@ func NewRulesModel(rules rules.Rules, validator *validation.Validator) *RulesMod
 			options.IncludeSubfolders:     lastestRules.IncludeSubfolders,
 			options.DeleteEmptySubfolders: lastestRules.DeleteEmptySubfolders,
 			options.SendFilesToTrash:      lastestRules.SendFilesToTrash,
+			options.SecureDeleteFiles:     lastestRules.SecureDeleteFiles,
 			options.LogOperations:         lastestRules.LogOperations,
 			options.LogToFile:             lastestRules.LogToFile,
 			options.ShowStatistics:        lastestRules.ShowStatistics,
 			options.ExitAfterDeletion:     lastestRules.ExitAfterDeletion,
 		},
-		rules:           rules,
-		rulesPath:       rulesPath,
-		SuccessSaveText: "",
-		FocusedElement:  "locationInput",
-		Validator:       validator,
+		SecureDeletionAlgo: "none",
+		rules:              rules,
+		rulesPath:          rulesPath,
+		SuccessSaveText:    "",
+		FocusedElement:     "locationInput",
+		Validator:          validator,
 	}
 }
 
@@ -592,6 +596,7 @@ func (m *RulesModel) handleEnter() (tea.Model, tea.Cmd) {
 				m.OptionState[options.IncludeSubfolders],
 				m.OptionState[options.DeleteEmptySubfolders],
 				m.OptionState[options.SendFilesToTrash],
+				m.OptionState[options.SecureDeleteFiles],
 				m.OptionState[options.LogOperations],
 				m.OptionState[options.LogToFile],
 				m.OptionState[options.ShowStatistics],
@@ -726,4 +731,12 @@ func (m *RulesModel) GetOlderInput() textinput.Model {
 
 func (m *RulesModel) GetNewerInput() textinput.Model {
 	return m.NewerInput
+}
+
+func (m *RulesModel) GetSecureDeletionAlgo() string {
+	return m.SecureDeletionAlgo
+}
+
+func (m *RulesModel) SetSecureDeletionAlgo(algo string) {
+	m.SecureDeletionAlgo = algo
 }

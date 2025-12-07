@@ -204,4 +204,17 @@ var (
 					Foreground(lipgloss.Color("#fff")).
 					Padding(0, 1).
 					Align(lipgloss.Right)
+
+	SubOptionStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#CCCCCC")).
+			PaddingLeft(2)
+
+	SubOptionFocusedStyle = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#FFD700")).
+				Background(lipgloss.Color("#333333")).
+				PaddingLeft(2)
+
+	SubOptionSelectedStyle = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#90EE90")).
+				PaddingLeft(2)
 )

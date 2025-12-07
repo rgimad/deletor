@@ -53,13 +53,14 @@ func WithNewerThan(time string) RuleOption {
 }
 
 // WithOptions sets multiple boolean options at once
-func WithOptions(showHidden, confirmDeletion, includeSubfolders, deleteEmptySubfolders, sendToTrash, logOps, logToFile, showStats, exitAfterDeletion bool) RuleOption {
+func WithOptions(showHidden, confirmDeletion, includeSubfolders, deleteEmptySubfolders, sendToTrash, secureDeleteFiles, logOps, logToFile, showStats, exitAfterDeletion bool) RuleOption {
 	return func(r *defaultRules) {
 		r.ShowHiddenFiles = showHidden
 		r.ConfirmDeletion = confirmDeletion
 		r.IncludeSubfolders = includeSubfolders
 		r.DeleteEmptySubfolders = deleteEmptySubfolders
 		r.SendFilesToTrash = sendToTrash
+		r.SecureDeleteFiles = secureDeleteFiles
 		r.LogOperations = logOps
 		r.LogToFile = logToFile
 		r.ShowStatistics = showStats

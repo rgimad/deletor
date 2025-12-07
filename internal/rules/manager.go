@@ -73,6 +73,8 @@ func (d *defaultRules) SetupRulesConfig() error {
 			IncludeSubfolders:     options.DefaultCleanOptionState[options.IncludeSubfolders],
 			DeleteEmptySubfolders: options.DefaultCleanOptionState[options.DeleteEmptySubfolders],
 			SendFilesToTrash:      options.DefaultCleanOptionState[options.SendFilesToTrash],
+			SecureDeleteFiles:     options.DefaultCleanOptionState[options.SecureDeleteFiles],
+			SecureDeletionAlgo:    options.DefaultSecureDeletionAlgo,
 			LogOperations:         options.DefaultCleanOptionState[options.LogOperations],
 			LogToFile:             options.DefaultCleanOptionState[options.LogToFile],
 			ShowStatistics:        options.DefaultCleanOptionState[options.ShowStatistics],

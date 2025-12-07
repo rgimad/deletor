@@ -28,7 +28,7 @@ func setupTestModel() *views.RulesModel {
 		rules.WithExclude([]string{}),
 		rules.WithOlderThan(""),
 		rules.WithNewerThan(""),
-		rules.WithOptions(false, false, false, false, false, false, false, false, false),
+		rules.WithOptions(false, false, false, false, false, false, false, false, false, false),
 	); err != nil {
 		panic(err)
 	}

@@ -30,40 +30,41 @@ import (
 )
 
 type CleanFilesModel struct {
-	List              list.Model
-	ExtInput          textinput.Model
-	MinSizeInput      textinput.Model
-	MaxSizeInput      textinput.Model
-	PathInput         textinput.Model
-	ExcludeInput      textinput.Model
-	OlderInput        textinput.Model
-	NewerInput        textinput.Model
-	CurrentPath       string
-	Extensions        []string
-	MinSize           int64
-	MaxSize           int64
-	Exclude           []string
-	Options           []string
-	OptionState       map[string]bool
-	FocusedElement    string // "pathInput", "extInput","excludeInput","olderInput","newerInput", "minSizeInput","maxSizeInput", "deleteButton","dirButton", "clean_option_1", "clean_option_2", "clean_option_3"
-	FileToDelete      *models.CleanItem
-	ShowDirs          bool
-	DirList           list.Model
-	DirSize           int64 // Cached directory size
-	CalculatingSize   bool  // Flag to indicate size calculation in progress
-	FilteredSize      int64 // Total size of filtered files
-	FilteredCount     int   // Count of filtered files
-	Rules             rules.Rules
-	Filemanager       filemanager.FileManager
-	TabManager        *clean.CleanTabManager
-	Validator         *validation.Validator
-	Logger            *logging.Logger
-	Error             *errors.Error
-	IsLaunched        bool            // Track if the app has been launched
-	SelectedFiles     map[string]bool // Track selected files by path
-	SelectedSize      int64           // Track selected files size
-	SelectedCount     int             // Track selected files count
-	LastSelectedIndex int             // Track last selected index for range selection
+	List               list.Model
+	ExtInput           textinput.Model
+	MinSizeInput       textinput.Model
+	MaxSizeInput       textinput.Model
+	PathInput          textinput.Model
+	ExcludeInput       textinput.Model
+	OlderInput         textinput.Model
+	NewerInput         textinput.Model
+	CurrentPath        string
+	Extensions         []string
+	MinSize            int64
+	MaxSize            int64
+	Exclude            []string
+	Options            []string
+	OptionState        map[string]bool
+	SecureDeletionAlgo string
+	FocusedElement     string // "pathInput", "extInput","excludeInput","olderInput","newerInput", "minSizeInput","maxSizeInput", "deleteButton","dirButton", "clean_option_1", "clean_option_2", "clean_option_3"
+	FileToDelete       *models.CleanItem
+	ShowDirs           bool
+	DirList            list.Model
+	DirSize            int64 // Cached directory size
+	CalculatingSize    bool  // Flag to indicate size calculation in progress
+	FilteredSize       int64 // Total size of filtered files
+	FilteredCount      int   // Count of filtered files
+	Rules              rules.Rules
+	Filemanager        filemanager.FileManager
+	TabManager         *clean.CleanTabManager
+	Validator          *validation.Validator
+	Logger             *logging.Logger
+	Error              *errors.Error
+	IsLaunched         bool            // Track if the app has been launched
+	SelectedFiles      map[string]bool // Track selected files by path
+	SelectedSize       int64           // Track selected files size
+	SelectedCount      int             // Track selected files count
+	LastSelectedIndex  int             // Track last selected index for range selection
 }
 
 // Message for directory size updates
@@ -196,26 +197,28 @@ func InitialCleanModel(rules rules.Rules, fileManager filemanager.FileManager, v
 			options.IncludeSubfolders:     lastestRules.IncludeSubfolders,
 			options.DeleteEmptySubfolders: lastestRules.DeleteEmptySubfolders,
 			options.SendFilesToTrash:      lastestRules.SendFilesToTrash,
+			options.SecureDeleteFiles:     lastestRules.SecureDeleteFiles,
 			options.LogOperations:         lastestRules.LogOperations,
 			options.LogToFile:             lastestRules.LogToFile,
 			options.ShowStatistics:        lastestRules.ShowStatistics,
 			options.ExitAfterDeletion:     lastestRules.ExitAfterDeletion,
 		},
-		FocusedElement:    "list",
-		ShowDirs:          false,
-		DirList:           dirList,
-		DirSize:           0,
-		CalculatingSize:   false,
-		FilteredSize:      0,
-		FilteredCount:     0,
-		Rules:             rules,
-		Filemanager:       fileManager,
-		Validator:         validator,
-		IsLaunched:        expandedPath != "", // Set IsLaunched to true if path is already set
-		SelectedFiles:     make(map[string]bool),
-		SelectedSize:      0,
-		SelectedCount:     0,
-		LastSelectedIndex: -1,
+		SecureDeletionAlgo: lastestRules.SecureDeletionAlgo,
+		FocusedElement:     "list",
+		ShowDirs:           false,
+		DirList:            dirList,
+		DirSize:            0,
+		CalculatingSize:    false,
+		FilteredSize:       0,
+		FilteredCount:      0,
+		Rules:              rules,
+		Filemanager:        fileManager,
+		Validator:          validator,
+		IsLaunched:         expandedPath != "", // Set IsLaunched to true if path is already set
+		SelectedFiles:      make(map[string]bool),
+		SelectedSize:       0,
+		SelectedCount:      0,
+		LastSelectedIndex:  -1,
 	}
 
 	// Initialize tab manager
@@ -737,6 +740,9 @@ func (m *CleanFilesModel) OnDelete() (tea.Model, tea.Cmd) {
 			stats.TrashedFiles = int64(m.SelectedCount)
 			stats.TrashedSize = m.SelectedSize
 		} else {
+			if m.OptionState[options.SecureDeleteFiles] {
+				// TODO:
+			} // TODO: move to else:
 			for filePath := range m.SelectedFiles {
 				// Skip log files
 				if strings.HasSuffix(filePath, ".log") {
@@ -797,6 +803,9 @@ func (m *CleanFilesModel) OnDelete() (tea.Model, tea.Cmd) {
 		if m.OptionState[options.SendFilesToTrash] {
 			m.Filemanager.MoveFilesToTrash(m.CurrentPath, m.Extensions, m.Exclude, utils.ToBytesOrDefault(m.MinSizeInput.Value()), utils.ToBytesOrDefault(m.MaxSizeInput.Value()), olderDuration, newerDuration)
 		} else {
+			if m.OptionState[options.SecureDeleteFiles] {
+				// TODO:
+			} // TODO: move to else:
 			// Delete all files in the current directory and all subfolders
 			m.Filemanager.DeleteFiles(m.CurrentPath, m.Extensions, m.Exclude, utils.ToBytesOrDefault(m.MinSizeInput.Value()), utils.ToBytesOrDefault(m.MaxSizeInput.Value()), olderDuration, newerDuration)
 		}
@@ -838,6 +847,9 @@ func (m *CleanFilesModel) OnDelete() (tea.Model, tea.Cmd) {
 				m.Logger.Log(logging.DEBUG, fmt.Sprintf("Moved to trash: %s (size: %d)", item.Path, item.Size))
 			}
 		} else {
+			if m.OptionState[options.SecureDeleteFiles] {
+				// TODO:
+			} // TODO: move to else:
 			// Permanent deletion
 			if err := os.Remove(item.Path); err != nil {
 				if m.Logger != nil {
@@ -901,6 +913,9 @@ func (m *CleanFilesModel) OnDelete() (tea.Model, tea.Cmd) {
 					m.Logger.Log(logging.DEBUG, fmt.Sprintf("Moved to trash: %s (size: %d)", cleanItem.Path, cleanItem.Size))
 				}
 			} else {
+				if m.OptionState[options.SecureDeleteFiles] {
+					// TODO:
+				} // TODO: move to else:
 				// Permanent deletion
 				if err := os.Remove(cleanItem.Path); err != nil {
 					if m.Logger != nil {
@@ -958,6 +973,9 @@ func (m *CleanFilesModel) DeleteUserSelectedFiles(stats *logging.ScanStatistics)
 			stats.TrashedFiles = int64(m.SelectedCount)
 			stats.TrashedSize = m.SelectedSize
 		} else {
+			if m.OptionState[options.SecureDeleteFiles] {
+				// TODO:
+			} // TODO: move to else:
 			for filePath := range m.SelectedFiles {
 				os.Remove(filePath)
 			}
@@ -1141,6 +1159,7 @@ func (m *CleanFilesModel) Handle(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "alt+5": // Toggle send files to trash
 		m.OptionState[options.SendFilesToTrash] = !m.OptionState[options.SendFilesToTrash]
 		return m, nil
+	// TODO: add toggle for secure file deletion
 	case "alt+6": // Toggle log operations
 		m.OptionState[options.LogOperations] = !m.OptionState[options.LogOperations]
 		return m, nil
@@ -1756,6 +1775,13 @@ func (m *CleanFilesModel) GetMinSizeInput() textinput.Model {
 }
 func (m *CleanFilesModel) GetMaxSizeInput() textinput.Model {
 	return m.MaxSizeInput
+}
+
+func (m *CleanFilesModel) GetSecureDeletionAlgo() string {
+	return m.SecureDeletionAlgo
+}
+func (m *CleanFilesModel) SetSecureDeletionAlgo(algo string) {
+	m.SecureDeletionAlgo = algo
 }
 
 func (m *CleanFilesModel) GetExcludeInput() textinput.Model {

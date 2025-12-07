@@ -17,6 +17,12 @@ const (
 	SystemCache = "System cache"
 )
 
+const (
+	SecureDeletionZero    = "zero"
+	SecureDeletionDoD     = "dod"
+	SecureDeletionGutmann = "gutmann"
+)
+
 // If you change the bool in these options, you must also change the values in the default rules json (rules/manager.go).
 var DefaultCleanOptionState = map[string]bool{
 	ShowHiddenFiles:       false,
@@ -31,6 +37,8 @@ var DefaultCleanOptionState = map[string]bool{
 	ExitAfterDeletion:     false,
 }
 
+var DefaultSecureDeletionAlgo = SecureDeletionZero
+
 var DefaultCleanOption = []string{
 	ShowHiddenFiles,
 	ConfirmDeletion,
@@ -42,6 +50,12 @@ var DefaultCleanOption = []string{
 	LogToFile,
 	ShowStatistics,
 	ExitAfterDeletion,
+}
+
+var SecureDeletionAlgos = []string{
+	SecureDeletionZero,
+	SecureDeletionDoD,
+	SecureDeletionGutmann,
 }
 
 var DefaultCacheOptionState = map[string]bool{

@@ -17,9 +17,11 @@ type RulesModel interface {
 	GetFocusedElement() string
 	GetOptionState() map[string]bool
 	GetRulesPath() string
+	GetSecureDeletionAlgo() string
 	// Setters
 	SetFocusedElement(element string)
 	SetOptionState(option string, state bool)
+	SetSecureDeletionAlgo(algo string)
 
 	// Other
 	Update(msg tea.Msg) (tea.Model, tea.Cmd)

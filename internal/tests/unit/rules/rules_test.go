@@ -258,7 +258,7 @@ func TestUpdateRules_MultipleOptions(t *testing.T) {
 		rules.WithOlderThan("10d"),
 		rules.WithNewerThan("10d"),
 		rules.WithExtensions(testExtensions),
-		rules.WithOptions(true, true, true, false, false, true, false, true, false),
+		rules.WithOptions(true, true, true, false, false, false, true, false, true, false),
 		rules.WithExclude(testExclude),
 	)
 	if err != nil {

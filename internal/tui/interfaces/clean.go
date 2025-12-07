@@ -39,6 +39,7 @@ type CleanModel interface {
 	GetSelectedFiles() map[string]bool
 	GetSelectedCount() int
 	GetSelectedSize() int64
+	GetSecureDeletionAlgo() string
 
 	// Setters and state updates
 	SetFocusedElement(element string)
@@ -57,4 +58,5 @@ type CleanModel interface {
 	CalculateDirSizeAsync() tea.Cmd
 	LoadFiles() tea.Cmd
 	LoadDirs() tea.Cmd
+	SetSecureDeletionAlgo(algo string)
 }
